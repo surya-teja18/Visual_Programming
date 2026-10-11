@@ -1,0 +1,280 @@
+Task 13: Using ADO.NET for Storing and Manipulating Data
+Aim: To develop a Student Management System using ADO.NET to store, retrieve, update, and delete student information in a SQL Server database, with forms for a user-friendly interface.
+According to your lab manual, this task uses a StudentDB database and a Students table containing StudentID, Name, Age, Email, and Department.
+1. Steps to perform
+1. Open Visual Studio and create an ASP.NET Web Forms Application (.NET Framework).
+2. Create a SQL Server database named StudentDB.
+3. Create a Students table.
+4. Configure the database connection string in Web.config.
+5. Create forms for adding, viewing, updating, and deleting student records.
+6. Use ADO.NET classes such as SqlConnection and SqlCommand to perform database operations.
+7. Run the application and verify that student records are stored and manipulated correctly.
+2. Create the database and table
+Open SQL Server Management Studio (SSMS) and execute:
+CREATE DATABASE StudentDB;
+GO
+
+USE StudentDB;
+GO
+
+CREATE TABLE Students
+(
+    StudentID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100),
+    Age INT,
+    Email NVARCHAR(100),
+    Department NVARCHAR(50)
+);
+
+
+3. Configure Web.config
+Add the connection string inside the existing <configuration> element. Replace YOUR_SERVER_NAME with your SQL Server instance name.
+<connectionStrings>
+  <add name="StudentDBConnectionString"
+       connectionString="Data Source=YOUR_SERVER_NAME;Initial Catalog=StudentDB;Integrated Security=True"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+
+4. Add Student — AddStudent.aspx
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="AddStudent.aspx.cs"
+    Inherits="StudentManagementSystem.AddStudent" %>
+
+<!DOCTYPE html>
+<html>
+<body>
+<form id="form1" runat="server">
+    <h2>Add Student</h2>
+
+    Name:
+    <asp:TextBox ID="txtName" runat="server" />
+    <br /><br />
+
+    Age:
+    <asp:TextBox ID="txtAge" runat="server" />
+    <br /><br />
+
+    Email:
+    <asp:TextBox ID="txtEmail" runat="server" />
+    <br /><br />
+
+    Department:
+    <asp:TextBox ID="txtDepartment" runat="server" />
+    <br /><br />
+
+    <asp:Button ID="btnAdd" runat="server"
+        Text="Add Student" OnClick="btnAdd_Click" />
+    <br /><br />
+
+    <asp:Label ID="lblMessage" runat="server" />
+</form>
+</body>
+</html>
+
+
+Code — AddStudent.aspx.cs
+using System;
+using System.Data.SqlClient;
+using System.Configuration;
+
+namespace StudentManagementSystem
+{
+    public partial class AddStudent : System.Web.UI.Page
+    {
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+            int age;
+
+            if (!int.TryParse(txtAge.Text, out age) ||
+                age < 1 || age > 120)
+            {
+                lblMessage.Text = "Enter a valid age.";
+                return;
+            }
+
+            string cs = ConfigurationManager
+                .ConnectionStrings["StudentDBConnectionString"]
+                .ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(cs))
+            {
+                string query =
+                    "INSERT INTO Students (Name, Age, Email, Department) " +
+                    "VALUES (@Name, @Age, @Email, @Department)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Name", txtName.Text);
+                    cmd.Parameters.AddWithValue("@Age", age);
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text);
+                    cmd.Parameters.AddWithValue(
+                        "@Department", txtDepartment.Text);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            lblMessage.Text = "Student added successfully!";
+        }
+    }
+}
+
+
+5. View Students — ViewStudents.aspx
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="ViewStudents.aspx.cs"
+    Inherits="StudentManagementSystem.ViewStudents" %>
+
+<!DOCTYPE html>
+<html>
+<body>
+<form id="form1" runat="server">
+    <h2>Student Records</h2>
+
+    <asp:GridView ID="GridView1" runat="server"
+        AutoGenerateColumns="true">
+    </asp:GridView>
+</form>
+</body>
+</html>
+
+
+Code — ViewStudents.aspx.cs
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
+namespace StudentManagementSystem
+{
+    public partial class ViewStudents : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindGrid();
+            }
+        }
+
+        private void BindGrid()
+        {
+            string cs = ConfigurationManager
+                .ConnectionStrings["StudentDBConnectionString"]
+                .ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(cs))
+            {
+                string query = "SELECT * FROM Students";
+
+                using (SqlDataAdapter da =
+                       new SqlDataAdapter(query, conn))
+                {
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+                }
+            }
+        }
+    }
+}
+
+
+6. Update and Delete operations
+These additional event handlers demonstrate the remaining CRUD operations. Create the corresponding text boxes and buttons in your UpdateStudent.aspx and DeleteStudent.aspx forms, then connect their click events.
+Update student details
+protected void btnUpdate_Click(object sender, EventArgs e)
+{
+    string cs = ConfigurationManager
+        .ConnectionStrings["StudentDBConnectionString"]
+        .ConnectionString;
+
+    using (SqlConnection conn = new SqlConnection(cs))
+    {
+        string query =
+            "UPDATE Students SET Name=@Name WHERE StudentID=@ID";
+
+        using (SqlCommand cmd = new SqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@Name", txtName.Text);
+            cmd.Parameters.AddWithValue("@ID",
+                Convert.ToInt32(txtStudentID.Text));
+
+            conn.Open();
+            int rows = cmd.ExecuteNonQuery();
+
+            lblMessage.Text = rows > 0
+                ? "Student updated successfully!"
+                : "Student ID not found.";
+        }
+    }
+}
+
+
+Delete a student
+protected void btnDelete_Click(object sender, EventArgs e)
+{
+    string cs = ConfigurationManager
+        .ConnectionStrings["StudentDBConnectionString"]
+        .ConnectionString;
+
+    using (SqlConnection conn = new SqlConnection(cs))
+    {
+        string query = "DELETE FROM Students WHERE StudentID=@ID";
+
+        using (SqlCommand cmd = new SqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@ID",
+                Convert.ToInt32(txtStudentID.Text));
+
+            conn.Open();
+            int rows = cmd.ExecuteNonQuery();
+
+            lblMessage.Text = rows > 0
+                ? "Student deleted successfully!"
+                : "Student ID not found.";
+        }
+    }
+}
+
+
+7. Explanation
+ADO.NET component	Purpose
+SqlConnection	Connects to SQL Server
+SqlCommand	Executes SQL commands
+SqlDataAdapter	Retrieves data into a DataTable
+DataTable	Stores tabular data in memory
+ExecuteNonQuery()	Executes INSERT, UPDATE, or DELETE commands
+DataBind()	Displays retrieved records in the GridView
+Parameters.AddWithValue()	Supplies values to SQL parameters
+The four CRUD operations are:
+- Create: Insert a student.
+- Read: Display student records.
+- Update: Modify a student's name.
+- Delete: Remove a student record.
+8. Sample output
+Student Management System
+ Add Student 
+ View Students 
+ Update Student 
+ Delete Student 
+
+
+Student Records
+ID	Name	Age	Department
+1	Ravi	21	CSE
+2	Priya	22	IT
+Illustrative output; actual records depend on the data inserted into SQL Server.
+
+9. Result
+Thus, a Student Management System was developed using ADO.NET and SQL Server to store, retrieve, update, and delete student information.
+10. Viva questions and answers
+1. What is ADO.NET?
+ADO.NET is a .NET technology for accessing and manipulating data from databases.
+2. What is SqlConnection?
+It establishes a connection to a SQL Server database.
+3. What is SqlCommand?

@@ -1,0 +1,143 @@
+1. Aim
+To develop a C# console application using inheritance to generate an employee's Employee ID, User ID, Email ID, and salary.
+2. Requirements
+- Microsoft Visual Studio
+- C# Console Application
+3. Procedure / steps
+1. Open Microsoft Visual Studio.
+2. Click Create a new project.
+3. Select Console App (C#) and click Next.
+4. Enter the project name as EmployeeManagementSystem.
+5. Click Create.
+6. Open Program.cs and delete the default code.
+7. Copy the complete program below into the file.
+8. Save the file using Ctrl + S.
+9. Run the program using Ctrl + F5.
+10. Observe the generated Employee ID, User ID, Email ID, and salary.
+4. Program
+Copy the entire program into Program.cs.
+
+using System;
+
+namespace EmployeeManagementSystem
+{
+    // Base class
+    public class Person
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public DateTime DOB { get; set; }
+
+        public Person(string firstName, string lastName,
+                      string gender, DateTime dob)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Gender = gender;
+            DOB = dob;
+        }
+    }
+
+    // Employee inherits Person
+    public class Employee : Person
+    {
+        public string Department { get; set; }
+        public string Location { get; set; }
+        public int EmpSequence { get; set; }
+        public int YearsOfExperience { get; set; }
+
+        public Employee(string firstName, string lastName,
+                        string gender, DateTime dob,
+                        string department, string location,
+                        int empSequence, int yearsOfExperience)
+            : base(firstName, lastName, gender, dob)
+        {
+            Department = department;
+            Location = location;
+            EmpSequence = empSequence;
+            YearsOfExperience = yearsOfExperience;
+        }
+
+        public string GenerateEmailID()
+        {
+            return Registration.UserID + "@Tokyo.com";
+        }
+
+        public double CalculateSalary()
+        {
+            double netCompensation =
+                YearsOfExperience * 100000;
+
+            double hra = netCompensation * 0.10;
+
+            return netCompensation + hra;
+        }
+    }
+
+    // Registration inherits Employee
+    public class Registration : Employee
+    {
+        public static int EmployeeID;
+        public static string UserID;
+
+        public Registration(string firstName, string lastName,
+                            string gender, DateTime dob,
+                            string department, string location,
+                            int empSequence, int yearsOfExperience)
+            : base(firstName, lastName, gender, dob,
+                   department, location, empSequence,
+                   yearsOfExperience)
+        {
+            GenerateEmployeeID();
+            GenerateUserID();
+        }
+
+        public void GenerateEmployeeID()
+        {
+            EmployeeID = 10000 + EmpSequence;
+        }
+
+        public void GenerateUserID()
+        {
+            UserID = FirstName.Substring(0, 2).ToUpper()
+                     + EmployeeID;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Registration emp1 = new Registration(
+                "Rajesh",
+                "Sharma",
+                "Male",
+                new DateTime(1990, 5, 12),
+                "IT",
+                "Tokyo",
+                101,
+                5
+            );
+
+            Console.WriteLine(
+                $"Employee ID: {Registration.EmployeeID}");
+
+            Console.WriteLine(
+                $"User ID: {Registration.UserID}");
+
+            Console.WriteLine(
+                $"Email ID: {emp1.GenerateEmailID()}");
+
+            Console.WriteLine(
+                $"Salary: {emp1.CalculateSalary()}");
+        }
+    }
+}
+
+
+
+5. Explanation
+A. Person class
+The base class stores the personal details of an employee.
+-

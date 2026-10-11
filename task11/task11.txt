@@ -1,0 +1,207 @@
+Task 11: Student Management System Using Master Page
+Aim: To create an ASP.NET Website Application for a Student Management System using a Master Page linked to other web pages in the application.
+1. Steps to perform
+1. Open Visual Studio.
+2. Create an ASP.NET Web Forms Website using .NET Framework.
+3. Add a Master Page named Site.master.
+4. Design a common layout with a header, navigation menu, and content area.
+5. Add content pages such as Home.aspx, Students.aspx, and About.aspx.
+6. Link the content pages to the Master Page.
+7. Add navigation links to move between pages.
+8. Run the application and verify that the common layout appears on every page.
+2. Code — Site.master
+Copy this into Site.master. It provides the common header, navigation menu, and content placeholder.
+<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="Site.master.cs"
+    Inherits="StudentManagementSystem.Site" %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>Student Management System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .header {
+            background-color: #234e70;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 12px;
+        }
+
+        .navbar a {
+            color: white;
+            margin-right: 25px;
+            text-decoration: none;
+        }
+
+        .content {
+            padding: 25px;
+            background-color: white;
+            min-height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+
+        <div class="header">
+            <h1>Student Management System</h1>
+        </div>
+
+        <div class="navbar">
+            <asp:Menu ID="Menu1" runat="server"
+                Orientation="Horizontal">
+                <Items>
+                    <asp:MenuItem Text="Home"
+                        NavigateUrl="~/Home.aspx" />
+                    <asp:MenuItem Text="Add Student"
+                        NavigateUrl="~/AddStudent.aspx" />
+                    <asp:MenuItem Text="View Students"
+                        NavigateUrl="~/ViewStudents.aspx" />
+                    <asp:MenuItem Text="About"
+                        NavigateUrl="~/About.aspx" />
+                </Items>
+            </asp:Menu>
+        </div>
+
+        <div class="content">
+            <asp:ContentPlaceHolder
+                ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+    </form>
+</body>
+</html>
+
+
+3. Create the Home page — Home.aspx
+Right-click the project → Add → New Item → Web Form using Master Page. Select Site.master and name the page Home.aspx.
+<%@ Page Title="Home" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="Home.aspx.cs"
+    Inherits="StudentManagementSystem.Home" %>
+
+<asp:Content ID="Content1" runat="server"
+    ContentPlaceHolderID="MainContent">
+
+    <h2>Welcome to Student Management System</h2>
+
+    <p>This application helps manage student information.</p>
+
+    <ul>
+        <li>Add student details</li>
+        <li>View student records</li>
+        <li>Navigate between pages</li>
+    </ul>
+
+</asp:Content>
+
+
+4. Create the other content pages
+Create AddStudent.aspx, ViewStudents.aspx, and About.aspx using the same Web Form using Master Page option.
+For AddStudent.aspx, use:
+<%@ Page Title="Add Student" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="AddStudent.aspx.cs"
+    Inherits="StudentManagementSystem.AddStudent" %>
+
+<asp:Content ID="Content1" runat="server"
+    ContentPlaceHolderID="MainContent">
+
+    <h2>Add Student</h2>
+    <p>This page is for entering student details.</p>
+
+</asp:Content>
+
+
+For ViewStudents.aspx:
+<%@ Page Title="View Students" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="ViewStudents.aspx.cs"
+    Inherits="StudentManagementSystem.ViewStudents" %>
+
+<asp:Content ID="Content1" runat="server"
+    ContentPlaceHolderID="MainContent">
+
+    <h2>View Students</h2>
+    <p>This page is for viewing student records.</p>
+
+</asp:Content>
+
+
+For About.aspx:
+<%@ Page Title="About" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="About.aspx.cs"
+    Inherits="StudentManagementSystem.About" %>
+
+<asp:Content ID="Content1" runat="server"
+    ContentPlaceHolderID="MainContent">
+
+    <h2>About Us</h2>
+    <p>Student Management System developed using ASP.NET Web Forms.</p>
+
+</asp:Content>
+
+
+Important: These pages demonstrate the shared layout and navigation. The Add Student and View Students pages do not yet store or retrieve database records; that functionality is a separate implementation.
+5. Sample output
+Student Management System
+
+Home
+Add Student
+View Students
+About
+
+Welcome to Student Management System
+This application helps manage student information.
+- Add student details
+- View student records
+- Navigate between pages
+
+
+When you navigate to another page, the header and navigation remain the same; only the main content changes.
+6. Explanation
+- Master Page: Defines a common layout shared by multiple web pages.
+- Site.master: Contains the header, navigation, and content placeholder.
+- ContentPlaceHolder: Specifies where each content page displays its content.
+- Content: Supplies the page-specific content.
+- MasterPageFile: Connects a content page to its master page.
+- asp:Menu: Creates a navigation menu.
+- NavigateUrl: Specifies the destination page.
+- runat="server": Makes an ASP.NET control available to server-side processing.
+7. Result
+Thus, a Student Management System website was created using an ASP.NET Master Page linked to multiple content pages, providing a common layout and navigation throughout the application.
+8. Viva questions and answers
+1. What is a Master Page?
+A Master Page defines a common layout that can be reused across multiple ASP.NET Web Forms pages.
+2. What is the extension of a Master Page?
+.master
+3. What is a Content Page?
+A page that uses a Master Page and supplies its own content.
+4. What is ContentPlaceHolder?
+It defines a region in the Master Page where content from a content page is inserted.
+5. What is MasterPageFile?
+It identifies the Master Page used by a content page.
+6. What is the purpose of asp:Menu?
+It creates a navigation menu for moving between pages.
+7. What is the advantage of Master Pages?
+They reduce repeated layoutx`

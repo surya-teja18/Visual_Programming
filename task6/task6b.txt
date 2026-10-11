@@ -1,0 +1,73 @@
+Part 2: Creating a Public Assembly and Storing It in GAC
+1. Aim
+To create a strongly named assembly, install it in the Global Assembly Cache (GAC), and use it in another application.
+2. Procedure / steps
+Step 1: Sign the class library
+1. Open the existing MyMathLibrary project.
+2. Right-click the project and select Properties.
+3. Open the Signing tab.
+4. Enable Sign the assembly.
+5. Select New for the strong-name key file.
+6. Enter the key filename as MyMathKey.snk.
+7. Save the settings and rebuild the project.
+Step 2: Install the assembly in the GAC
+1. Open the Developer Command Prompt for Visual Studio as an administrator if required.
+2. Navigate to the directory containing the rebuilt DLL.
+3. Run this command:
+gacutil -i MyMathLibrary.dll
+
+
+4. Check the command output for confirmation that the assembly was installed.
+Important: The traditional GAC procedure applies to .NET Framework. It is not the standard deployment mechanism for modern .NET applications.
+Step 3: Create another console application
+1. Add a new Console App (.NET Framework) project named GlobalMathApp.
+2. Right-click References.
+3. Select Add Reference and locate the installed MyMathLibrary assembly in the Assemblies list, if available.
+4. Add the reference.
+5. Open Program.cs and enter the following code.
+3. Program: GlobalMathApp
+using System;
+using MyMathLibrary;
+
+namespace GlobalMathApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MathOperations mathOps = new MathOperations();
+
+            int sum = mathOps.Add(50, 70);
+            int difference = mathOps.Subtract(90, 45);
+            int product = mathOps.Multiply(10, 20);
+            double quotient = mathOps.Divide(100, 5);
+
+            Console.WriteLine("Sum: " + sum);
+            Console.WriteLine("Difference: " + difference);
+            Console.WriteLine("Product: " + product);
+            Console.WriteLine("Quotient: " + quotient);
+
+            Console.ReadLine();
+        }
+    }
+}
+
+
+4. Expected output
+Sum: 120
+Difference: 45
+Product: 200
+Quotient: 20
+
+
+5. Explanation
+Term	Explanation
+Assembly	A compiled .NET unit such as a DLL or EXE.
+Class library	A project that provides reusable classes and methods.
+Private assembly	An assembly deployed for use by a particular application.
+Strong name	An assembly identity that includes a public key and other identity information.
+GAC	The Global Assembly Cache stores shared .NET Framework assemblies.
+gacutil	A command-line utility for managing assemblies in the GAC.
+MyMathKey.snk	The strong-name key file used to sign the assembly.
+6. Result
+Thus, a private assembly was created and used by a console application. A strongly named assembly was also configured for installation in the GAC and use by another application.

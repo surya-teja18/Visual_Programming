@@ -1,0 +1,83 @@
+VISUAL PROGRAMMING LAB
+TASK 1(a): EMAIL ID AND USERNAME VALIDATION USING REGEX
+
+AIM:
+To validate Email ID and username using Regular Expressions in C#.
+
+SOFTWARE:
+Microsoft Visual Studio, C# Console Application.
+
+PROCEDURE:
+1. Open Visual Studio.
+2. Click Create a new project.
+3. Select Console App (C#) and click Next.
+4. Enter project name: EmailValidation.
+5. Click Create.
+6. Open Program.cs.
+7. Delete the existing code and paste the program below.
+8. Save the file using Ctrl + S.
+9. Run using Ctrl + F5.
+10. Enter the Email ID and username.
+11. Check the validation messages in the console.
+
+PROGRAM:
+
+using System;
+using System.Text.RegularExpressions;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+        string usernamePattern =
+            @"^[\w\d!@#$%^&*()\-_=+{};:,<.>]{3,16}$";
+
+        Console.Write("Enter your Email ID: ");
+        string email = Console.ReadLine();
+
+        if (Regex.IsMatch(email, emailPattern))
+        {
+            Console.WriteLine("Valid Email ID.");
+        }
+        else
+        {
+            Console.WriteLine("Invalid Email ID.");
+        }
+
+        Console.Write("Enter your Username: ");
+        string username = Console.ReadLine();
+
+        if (Regex.IsMatch(username, usernamePattern))
+        {
+            Console.WriteLine("Valid Username.");
+        }
+        else
+        {
+            Console.WriteLine("Invalid Username. Username must be 3 to 16 characters long and can include special characters.");
+        }
+    }
+}
+
+SAMPLE INPUT:
+Email ID: surya@gmail.com
+Username: Surya@123
+
+EXPECTED OUTPUT:
+Enter your Email ID: surya@gmail.com
+Valid Email ID.
+Enter your Username: Surya@123
+Valid Username.
+
+EXPLANATION:
+1. System provides Console input and output methods.
+2. System.Text.RegularExpressions provides Regex functionality.
+3. emailPattern checks the basic structure of an email address.
+4. usernamePattern permits specified characters and limits the username to 3-16 characters.
+5. Console.ReadLine() reads the user's input.
+6. Regex.IsMatch() checks whether the input matches the pattern.
+7. if-else displays the appropriate validation message.
+
+RESULT:
+The C# console application successfully validates Email IDs and usernames using Regular Expressions.

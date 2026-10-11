@@ -1,0 +1,115 @@
+1. Aim
+To develop a C# console application that uses the System.Reflection namespace to obtain information about types, methods, parameters, properties, and fields in an assembly.
+2. Software requirements
+- Microsoft Visual Studio
+- C# Console Application
+- .NET Framework or a compatible .NET version
+3. Procedure / steps
+1. Open Microsoft Visual Studio.
+2. Click Create a new project.
+3. Select Console App (C#) and click Next.
+4. Enter the project name as ReflectionDemo.
+5. Click Create.
+6. Open Program.cs and remove the default code.
+7. Copy and paste the complete program below.
+8. Save the file using Ctrl + S.
+9. Run the application using Ctrl + F5.
+10. Observe the assembly name and the information about types, methods, parameters, properties, and fields displayed in the console.
+4. Program
+Copy the entire program into Program.cs.
+
+using System;
+using System.Reflection;
+
+namespace ReflectionDemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Get the current assembly
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            // Display assembly full name
+            Console.WriteLine(
+                $"Assembly Full Name: {assembly.FullName}\n");
+
+            // Get all types in the assembly
+            Type[] types = assembly.GetTypes();
+
+            foreach (Type type in types)
+            {
+                Console.WriteLine($"Type: {type.FullName}");
+
+                // Display public methods
+                MethodInfo[] methods = type.GetMethods();
+
+                foreach (MethodInfo method in methods)
+                {
+                    Console.WriteLine($" Method: {method.Name}");
+
+                    // Display method parameters
+                    ParameterInfo[] parameters =
+                        method.GetParameters();
+
+                    foreach (ParameterInfo parameter in parameters)
+                    {
+                        Console.WriteLine(
+                            $" Parameter: {parameter.Name} " +
+                            $"of Type: {parameter.ParameterType}");
+                    }
+
+                    // Display return type
+                    Console.WriteLine(
+                        $" Return Type: {method.ReturnType}");
+                }
+
+                // Display public properties
+                PropertyInfo[] properties = type.GetProperties();
+
+                foreach (PropertyInfo property in properties)
+                {
+                    Console.WriteLine(
+                        $" Property: {property.Name} " +
+                        $"of Type: {property.PropertyType}");
+                }
+
+                // Display public fields
+                FieldInfo[] fields = type.GetFields();
+
+                foreach (FieldInfo field in fields)
+                {
+                    Console.WriteLine(
+                        $" Field: {field.Name} " +
+                        $"of Type: {field.FieldType}");
+                }
+
+                Console.WriteLine();
+            }
+        }
+    }
+
+    public class SampleClass
+    {
+        public int SampleField;
+        public string SampleProperty { get; set; }
+
+        public void SampleMethod1()
+        {
+            Console.WriteLine("SampleMethod1 called.");
+        }
+
+        public int SampleMethod2(int param1, string param2)
+        {
+            Console.WriteLine(
+                $"SampleMethod2 called with parameters: " +
+                $"{param1}, {param2}");
+
+            return param1 + param2.Length;
+        }
+    }
+}
+
+
+
+5. Explanation

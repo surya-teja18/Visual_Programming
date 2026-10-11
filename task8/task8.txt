@@ -1,0 +1,98 @@
+Task 8: Using System.Net.WebClient to Download and Upload Data
+Aim: To create a Windows Forms application using System.Net.WebClient to download data from a specified URL and upload a file to a server.
+1. Steps to perform
+1. Open Visual Studio.
+2. Create a Windows Forms App (.NET Framework) project.
+3. Name the project ToDoPlanner.
+4. Open the form in Design view and add these controls:
+Control	Name	Purpose
+TextBox	txtUrl	Enter the URL
+Button	btnDownload	Download data
+Button	btnUpload	Upload a file
+Label	lblStatus	Display status or errors
+5. Double-click each button to generate its click-event handler.
+6. Enter the following code in MainForm.cs.
+2. Code — MainForm.cs
+using System;
+using System.Net;
+using System.Windows.Forms;
+
+namespace ToDoPlanner
+{
+    public partial class MainForm : Form
+    {
+        public MainForm()
+        {
+            InitializeComponent();
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = txtUrl.Text;
+                    string data = client.DownloadString(url);
+
+                    MessageBox.Show("Data downloaded successfully!");
+                    lblStatus.Text = "Download successful.";
+                }
+                catch (Exception ex)
+                {
+                    lblStatus.Text = "Error: " + ex.Message;
+                }
+            }
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                    string url = txtUrl.Text;
+
+                    byte[] response = client.UploadFile(
+                        url, "POST", "filePath.txt"
+                    );
+
+                    MessageBox.Show("Data uploaded successfully!");
+                    lblStatus.Text = "Upload successful.";
+                }
+                catch (Exception ex)
+                {
+                    lblStatus.Text = "Error: " + ex.Message;
+                }
+            }
+        }
+    }
+}
+
+
+This follows the code in your lab manual, with status messages added for successful operations.
+3. Explanation
+- using System.Net; — provides the WebClient class.
+- WebClient — communicates with a web server using HTTP.
+- DownloadString(url) — downloads text from the specified URL and stores it in the data variable.
+- UploadFile(url, "POST", "filePath.txt") — uploads the local file to the server using an HTTP POST request.
+- try — executes the download or upload operation.
+- catch (Exception ex) — handles errors such as invalid URLs or failed network requests.
+- lblStatus.Text — displays the operation status on the form.
+- using — ensures the WebClient resource is disposed of after use.
+Important: Create filePath.txt in the application's working directory. Uploading requires a real server endpoint that accepts file uploads. The manual's DownloadString() retrieves text into memory; it does not save it as a file.
+4. Sample output
+ToDoPlanner — Windows Form
+Enter URL:
+https://example.com
+
+Download
+
+Upload
+
+
+Status: Download successful.
+
+The actual result depends on the URL, network connection, and server configuration.
+5. Result
+Thus, a Windows Forms application was created using System.Net.WebClient to demonstrate downloading data from a specified URI and uploading a file to a server.

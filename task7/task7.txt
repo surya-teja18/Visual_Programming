@@ -1,0 +1,149 @@
+Task 7: Sending Mail Using SMTP in ASP.NET
+Visual Programming Lab Manual · Pages 28–29
+I'll follow your lab manual and provide a Notepad-ready reference with the procedure, ASP.NET Web Form code, C# code-behind, explanation, and expected output.
+1. Aim
+To develop a simple ASP.NET Web Form that demonstrates sending emails using SMTP in the .NET Framework.
+2. Software requirements
+- Microsoft Visual Studio
+- ASP.NET Web Forms
+- C# and .NET Framework
+- SMTP server configuration and valid email credentials
+3. Procedure / steps
+1. Open Microsoft Visual Studio.
+2. Create a new ASP.NET Web Application (.NET Framework) project.
+3. Name the project ToDoPlanner.
+4. Select Web Forms as the project template.
+5. Add a Web Form named SendMail.aspx.
+6. Design the form with fields for recipient email, subject, and message body.
+7. Add a button to send the email and a label to display the status.
+8. Open SendMail.aspx.cs and add the C# SMTP logic.
+9. Configure the SMTP server and valid credentials in the application configuration.
+10. Run the application, fill in the fields, and click Send Mail.
+4. Design the Web Form — SendMail.aspx
+Open SendMail.aspx and paste this markup:
+
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="SendMail.aspx.cs"
+    Inherits="ToDoPlanner.SendMail" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Send Mail</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Send Email using SMTP</h2>
+
+            <asp:Label ID="Label1" runat="server"
+                Text="To:"></asp:Label>
+            <asp:TextBox ID="txtTo" runat="server">
+            </asp:TextBox>
+            <br /><br />
+
+            <asp:Label ID="Label2" runat="server"
+                Text="Subject:"></asp:Label>
+            <asp:TextBox ID="txtSubject" runat="server">
+            </asp:TextBox>
+            <br /><br />
+
+            <asp:Label ID="Label3" runat="server"
+                Text="Body:"></asp:Label>
+            <asp:TextBox ID="txtBody" runat="server"
+                TextMode="MultiLine">
+            </asp:TextBox>
+            <br /><br />
+
+            <asp:Button ID="btnSend" runat="server"
+                Text="Send Mail"
+                OnClick="btnSend_Click" />
+            <br /><br />
+
+            <asp:Label ID="lblStatus" runat="server"
+                ForeColor="Red"></asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+5. C# code-behind — SendMail.aspx.cs
+Open SendMail.aspx.cs and paste the following code.
+
+using System;
+using System.Net;
+using System.Net.Mail;
+
+namespace ToDoPlanner
+{
+    public partial class SendMail : System.Web.UI.Page
+    {
+        protected void btnSend_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+
+                mail.From = new MailAddress("your-email@example.com");
+                mail.To.Add(txtTo.Text);
+                mail.Subject = txtSubject.Text;
+                mail.Body = txtBody.Text;
+
+                SmtpClient smtp = new SmtpClient();
+
+                smtp.Host = "smtp.yourserver.com";
+                smtp.Port = 587;
+                smtp.Credentials =
+                    new NetworkCredential("username", "password");
+
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+                lblStatus.Text = "Email sent successfully!";
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = "Error: " + ex.Message;
+            }
+        }
+    }
+}
+
+
+
+Important: The SMTP host, sender address, username, and password above are placeholders. Replace them with valid SMTP settings before attempting to send an actual email. Use an authorized SMTP account and do not store real passwords in source code.
+6. Explanation
+Code	Purpose
+MailMessage	Creates the email message.
+mail.From	Specifies the sender's email address.
+mail.To.Add()	Specifies the recipient.
+mail.Subject	Sets the email subject.
+mail.Body	Sets the email message.
+SmtpClient	Connects to an SMTP server to send the email.
+smtp.Host	Specifies the SMTP server address.
+smtp.Port	Specifies the SMTP port; 587 is commonly used with STARTTLS.
+smtp.EnableSsl = true	Enables TLS/SSL support for the SMTP connection.
+smtp.Send(mail)	Sends the email.
+try-catch	Handles errors and displays the error message.
+7. Expected output
+Send Email using SMTP
+Example of the form displayed in the browser.
+To:recipient@example.com
+
+Subject:Lab Test Email
+
+Body:This is a test email from the Visual Programming Lab.
+
+Email sent successfully!
+
+The success message appears only if the SMTP server accepts the email without an exception.
+
+8. Result
+Thus, an ASP.NET Web Form was developed to demonstrate sending emails using SMTP in the .NET Framework.
+9. Viva questions
+1. What is SMTP?
+SMTP stands for Simple Mail Transfer Protocol. It is used to send email messages.
+2. What is SmtpClient?
+It is a .NET class used to send email messag

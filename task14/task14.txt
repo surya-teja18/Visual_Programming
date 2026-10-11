@@ -1,0 +1,76 @@
+Task 14: Deploying an ASP.NET Web Application Using IIS
+Aim: To convert the Student Management System into an ASP.NET Web Application, connect it to SQL Server, deploy it using Internet Information Services (IIS), and access it through a browser.
+Your lab manual specifies these main activities: convert the project to a Web Application if needed, publish it from Visual Studio, configure IIS, ensure SQL Server is accessible, and test the site using a localhost URL.
+1. Steps to perform
+1. Open the Student Management System project created in Tasks 11–13.
+2. Ensure the application uses ASP.NET Web Forms and SQL Server.
+3. Convert the project to a Web Application if it is not already one.
+4. Enable IIS and the required ASP.NET features in Windows.
+5. Publish the project from Visual Studio.
+6. Configure a website in IIS to point to the published folder.
+7. Configure the application pool to use the appropriate .NET Framework version.
+8. Ensure the application can connect to SQL Server.
+9. Open the website in a browser and test its pages.
+2. Convert the project to a Web Application
+1. Open the project in Visual Studio.
+2. In Solution Explorer, right-click the project.
+3. If the option is available, select Convert to Web Application.
+4. Build the project and fix any compilation errors.
+If you created an ASP.NET Web Application project from the beginning, this conversion step may not be necessary.
+3. Enable IIS in Windows
+1. Open Control Panel.
+2. Select Programs → Turn Windows features on or off.
+3. Enable:
+   - Internet Information Services (IIS)
+   - Web Management Tools → IIS Management Console
+   - World Wide Web Services → Application Development Features → ASP.NET 4.x
+   - .NET Extensibility 4.x and ISAPI Extensions/Filters, if required
+4. Click OK and wait for installation to finish.
+4. Publish the application
+1. In Visual Studio, right-click the Student Management System project.
+2. Select Publish.
+3. Choose Folder as the publishing target.
+4. Select a folder, for example:
+C:\PublishedApps\StudentManagementSystem
+5. Click Publish.
+Visual Studio generates the deployed application files in the selected folder.
+5. Configure IIS
+1. Press Win + R, type inetmgr, and press Enter to open IIS Manager.
+2. Expand the server in the left panel, right-click Sites, and select Add Website.
+3. Enter the following settings:
+   | Setting | Value |
+   |---|---|
+   | Site name | StudentManagementSystem |
+   | Physical path | C:\PublishedApps\StudentManagementSystem |
+   | Type | http |
+   | Port | 8080 |
+4. Click OK to create the website.
+5. Open Application Pools, select the pool associated with your website, and choose Basic Settings. For an ASP.NET Web Forms application targeting .NET Framework 4.x, select .NET CLR Version v4.0 and usually Integrated pipeline mode.
+6. Start the website if it is not already running.
+6. Configure the database connection
+Verify the StudentDBConnectionString in Web.config. It must point to the correct SQL Server instance and database.
+If Windows Authentication is used, the IIS worker process identity must have the required SQL Server permissions. If the database is on another server, ensure network access and authentication are configured correctly.
+7. Test the deployed application
+Open a browser and visit:
+http://localhost:8080/
+Test the Home, Add Student, View Students, Update Student, and Delete Student pages. If database operations are implemented, verify that records can be added, displayed, updated, and deleted.
+Expected output
+
+Student Management System website opens through IIS, displays its pages, and connects to SQL Server when the connection and permissions are configured correctly.
+
+8. Result
+Thus, the ASP.NET Student Management System was published and deployed using IIS, configured to use the appropriate .NET Framework application pool, and tested through a browser using localhost.
+9. Viva questions and answers
+1. What is IIS?
+Internet Information Services is Microsoft's web server used to host websites and web applications on Windows.
+2. What is deployment?
+Deployment is the process of publishing an application and making it available in its target environment.
+3. What is an application pool in IIS?
+It isolates web applications into worker-process environments and controls their runtime configuration.
+4. What is the purpose of publishing?
+Publishing prepares the application files for deployment.
+5. What does localhost mean?
+It refers to the local computer.
+6. What is the default HTTP port?
+Port 80 is the standard HTTP port. In this procedure, port 8080 is used to avoid conflicts.
+7

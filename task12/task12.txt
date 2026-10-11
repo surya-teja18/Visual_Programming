@@ -1,0 +1,188 @@
+Task 12: Creating Content Pages and Using Navigation Controls
+Aim: To create five content pages for the Student Management System and use different ASP.NET navigation controls to navigate between the pages.
+Your lab manual lists Task 12 as creating five content pages and using different navigation controls. We will use the Master Page from Task 11 and add five content pages.
+1. Steps to perform
+1. Open the Student Management System project from Task 11.
+2. Ensure Site.master exists.
+3. Create five Web Forms using the Web Form using Master Page option.
+4. Name the pages Home.aspx, AddStudent.aspx, ViewStudents.aspx, UpdateStudent.aspx, and About.aspx.
+5. Use the same Master Page for all five pages.
+6. Add navigation controls such as Menu, TreeView, and SiteMapPath.
+7. Run the application and verify that navigation works.
+2. Create the five content pages
+The manual specifies these five pages:
+Page	Purpose
+Home.aspx	Home page
+AddStudent.aspx	Add student details
+ViewStudents.aspx	View student records
+UpdateStudent.aspx	Update student details
+DeleteStudent.aspx	Delete student records
+For each page, right-click the project → Add → New Item → Web Form using Master Page → select Site.master.
+3. Code for the content pages
+Use the following code for each page. The code uses the MainContent placeholder from Task 11.
+A. Home.aspx
+<%@ Page Title="Home" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="Home.aspx.cs"
+    Inherits="StudentManagementSystem.Home" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent"
+    runat="server">
+    <h2>Welcome to the Student Management System</h2>
+    <p>This system allows you to manage student records efficiently.</p>
+</asp:Content>
+
+
+B. AddStudent.aspx
+<%@ Page Title="Add Student" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="AddStudent.aspx.cs"
+    Inherits="StudentManagementSystem.AddStudent" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent"
+    runat="server">
+    <h2>Add Student</h2>
+
+    Name:
+    <asp:TextBox ID="txtName" runat="server" />
+    <br /><br />
+
+    Age:
+    <asp:TextBox ID="txtAge" runat="server" />
+    <br /><br />
+
+    Email:
+    <asp:TextBox ID="txtEmail" runat="server" />
+    <br /><br />
+
+    <asp:Button ID="btnAdd" runat="server" Text="Add Student" />
+</asp:Content>
+
+
+C. ViewStudents.aspx
+<%@ Page Title="View Students" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="ViewStudents.aspx.cs"
+    Inherits="StudentManagementSystem.ViewStudents" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent"
+    runat="server">
+    <h2>View Students</h2>
+
+    <asp:GridView ID="GridView1" runat="server"
+        AutoGenerateColumns="true">
+    </asp:GridView>
+</asp:Content>
+
+
+D. UpdateStudent.aspx
+<%@ Page Title="Update Student" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="UpdateStudent.aspx.cs"
+    Inherits="StudentManagementSystem.UpdateStudent" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent"
+    runat="server">
+    <h2>Update Student</h2>
+
+    Student ID:
+    <asp:TextBox ID="txtStudentID" runat="server" />
+    <br /><br />
+
+    New Name:
+    <asp:TextBox ID="txtName" runat="server" />
+    <br /><br />
+
+    <asp:Button ID="btnUpdate" runat="server" Text="Update Student" />
+</asp:Content>
+
+
+E. DeleteStudent.aspx
+<%@ Page Title="Delete Student" Language="C#"
+    MasterPageFile="~/Site.master"
+    AutoEventWireup="true"
+    CodeBehind="DeleteStudent.aspx.cs"
+    Inherits="StudentManagementSystem.DeleteStudent" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent"
+    runat="server">
+    <h2>Delete Student</h2>
+
+    Student ID:
+    <asp:TextBox ID="txtStudentID" runat="server" />
+    <br /><br />
+
+    <asp:Button ID="btnDelete" runat="server" Text="Delete Student" />
+</asp:Content>
+
+
+Note: These forms demonstrate page design. The Add, Update, and Delete buttons require event handlers and database code to perform actual CRUD operations.
+4. Add navigation controls
+Your Task 11 Master Page already contains an asp:Menu control. Update its menu items in Site.master so they point to the five pages:
+<asp:Menu ID="Menu1" runat="server"
+    Orientation="Horizontal">
+    <Items>
+        <asp:MenuItem Text="Home"
+            NavigateUrl="~/Home.aspx" />
+        <asp:MenuItem Text="Add Student"
+            NavigateUrl="~/AddStudent.aspx" />
+        <asp:MenuItem Text="View Students"
+            NavigateUrl="~/ViewStudents.aspx" />
+        <asp:MenuItem Text="Update Student"
+            NavigateUrl="~/UpdateStudent.aspx" />
+        <asp:MenuItem Text="Delete Student"
+            NavigateUrl="~/DeleteStudent.aspx" />
+    </Items>
+</asp:Menu>
+
+
+You can also add a SiteMapPath control to the Master Page to show the user's current location. For it to display a breadcrumb hierarchy, add a Web.sitemap file and define the page hierarchy.
+Example Web.sitemap:
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+  <siteMapNode url="~/Home.aspx" title="Home">
+    <siteMapNode url="~/AddStudent.aspx" title="Add Student" />
+    <siteMapNode url="~/ViewStudents.aspx" title="View Students" />
+    <siteMapNode url="~/UpdateStudent.aspx" title="Update Student" />
+    <siteMapNode url="~/DeleteStudent.aspx" title="Delete Student" />
+  </siteMapNode>
+</siteMap>
+
+
+Add this inside the Master Page where you want the breadcrumb to appear:
+<asp:SiteMapPath ID="SiteMapPath1" runat="server" />
+
+
+5. Sample output
+Student Management System
+
+Home
+
+Add Student
+
+View Students
+
+Update Student
+
+Delete Student
+
+
+Welcome to the Student Management System
+This system allows you to manage student records efficiently.
+
+Selecting a menu item opens its corresponding content page while preserving the common Master Page layout.
+
+6. Result
+Thus, five ASP.NET content pages were created using the Master Page, and navigation controls were configured to navigate between the pages.
+7. Viva questions and answers
+1. What is a content page?
+A web page that uses a Master Page and provides page-specific content.
+2. What is a navigation control?
+An ASP.NET control that helps users move between pages.
+3. What is the use of asp:Menu?
+It displays navigation links in a menu format.
+4. What is SiteMap

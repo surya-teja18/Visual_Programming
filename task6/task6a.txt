@@ -1,0 +1,92 @@
+Part 1: Creating and Using a Private Assembly
+1. Aim
+To create a private assembly containing mathematical operations and use it in a separate C# console application.
+2. Procedure / steps
+Step 1: Create the class library
+1. Open Visual Studio.
+2. Select Create a new project.
+3. Choose Class Library (.NET Framework), if available.
+4. Name the project MyMathLibrary.
+5. Click Create.
+6. Open Class1.cs and replace its contents with the code below.
+3. Program 1: MyMathLibrary — Class Library
+namespace MyMathLibrary
+{
+    public class MathOperations
+    {
+        public int Add(int a, int b)
+        {
+            return a + b;
+        }
+
+        public int Subtract(int a, int b)
+        {
+            return a - b;
+        }
+
+        public int Multiply(int a, int b)
+        {
+            return a * b;
+        }
+
+        public double Divide(int a, int b)
+        {
+            return (double)a / b;
+        }
+    }
+}
+
+
+Step 2: Build the class library
+1. Save the code.
+2. Select Build → Build Solution.
+3. Locate the generated MyMathLibrary.dll in the project's build output folder, usually bin\Debug or bin\Release.
+Step 3: Create the console application
+1. Add a new project to the solution.
+2. Choose Console App (.NET Framework) and name it MathApp.
+3. Right-click References in the MathApp project.
+4. Select Add Reference → Browse.
+5. Browse to MyMathLibrary.dll and add it.
+6. Open Program.cs in MathApp and paste the following code.
+4. Program 2: MathApp — Console Application
+using System;
+using MyMathLibrary;
+
+namespace MathApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MathOperations mathOps = new MathOperations();
+
+            int sum = mathOps.Add(10, 20);
+            int difference = mathOps.Subtract(30, 15);
+            int product = mathOps.Multiply(5, 6);
+            double quotient = mathOps.Divide(40, 8);
+
+            Console.WriteLine("Sum: " + sum);
+            Console.WriteLine("Difference: " + difference);
+            Console.WriteLine("Product: " + product);
+            Console.WriteLine("Quotient: " + quotient);
+
+            Console.ReadLine();
+        }
+    }
+}
+
+
+5. Expected output
+Sum: 30
+Difference: 15
+Product: 30
+Quotient: 5
+
+
+6. Explanation
+- MyMathLibrary is the class library that contains reusable mathematical methods.
+- MathOperations defines addition, subtraction, multiplication, and division.
+- MyMathLibrary.dll contains the compiled library.
+- using MyMathLibrary; makes the library's namespace accessible.
+- MathApp references the DLL and calls its methods.
+A private assembly is normally deployed with the application that uses it. It does not need to be installed into the GAC.

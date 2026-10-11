@@ -1,0 +1,389 @@
+Task 9: Working with ASP.NET Web Pages — Validation Controls
+Aim: To create an ASP.NET Web Application that accepts Name, Password, Confirm Password, Age, Email ID, and User ID, and validates all fields using ASP.NET validation controls.
+According to your lab manual, the requirements are:
+- All fields are mandatory.
+- Password must be reconfirmed.
+- Age must be between 21 and 30.
+- Email ID must be valid.
+- User ID must contain at least one capital letter and one digit, with a length of 7–20 characters.
+1. Steps to perform
+1. Open Visual Studio.
+2. Create an ASP.NET Web Application (.NET Framework) project.
+3. Select Web Forms.
+4. Add a Web Form named Task9.aspx.
+5. Design the form with text boxes for the six fields and a Submit button.
+6. Add ASP.NET validation controls to validate the inputs.
+7. Run the application and test both valid and invalid inputs.
+2. Code — Register.aspx
+Copy this code into Register.aspx. Replace ToDoPlanner in the Inherits attribute if your project uses a different namespace.
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Register.aspx.cs"
+    Inherits="ToDoPlanner.Register" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Registration Form</title>
+</head>
+<body>
+<form id="form1" runat="server">
+    <div>
+        <h2>Registration Form</h2>
+
+        Name:
+        <asp:TextBox ID="txtName" runat="server" />
+        <asp:RequiredFieldValidator
+            ID="rfvName" runat="server"
+            ControlToValidate="txtName"
+            ErrorMessage="Name is required."
+            ForeColor="Red" />
+        <br /><br />
+
+        Password:
+        <asp:TextBox ID="txtPassword" runat="server"
+            TextMode="Password" />
+        <asp:RequiredFieldValidator
+            ID="rfvPassword" runat="server"
+            ControlToValidate="txtPassword"
+            ErrorMessage="Password is required."
+            ForeColor="Red" />
+        <br /><br />
+
+        Confirm Password:
+        <asp:TextBox ID="txtConfirmPassword" runat="server"
+            TextMode="Password" />
+        <asp:RequiredFieldValidator
+            ID="rfvConfirm" runat="server"
+            ControlToValidate="txtConfirmPassword"
+            ErrorMessage="Confirm password is required."
+            ForeColor="Red" />
+        <asp:CompareValidator
+            ID="cvPassword" runat="server"
+            ControlToValidate="txtConfirmPassword"
+            ControlToCompare="txtPassword"
+            ErrorMessage="Passwords do not match."
+            ForeColor="Red" />
+        <br /><br />
+
+        Age:
+        <asp:TextBox ID="txtAge" runat="server" />
+        <asp:RequiredFieldValidator
+            ID="rfvAge" runat="server"
+            ControlToValidate="txtAge"
+            ErrorMessage="Age is required."
+            ForeColor="Red" />
+        <asp:RangeValidator
+            ID="rvAge" runat="server"
+            ControlToValidate="txtAge"
+            MinimumValue="21" MaximumValue="30"
+            Type="Integer"
+            ErrorMessage="Age must be between 21 and 30."
+            ForeColor="Red" />
+        <br /><br />
+
+        Email:
+        <asp:TextBox ID="txtEmail" runat="server" />
+        <asp:RequiredFieldValidator
+            ID="rfvEmail" runat="server"
+            ControlToValidate="txtEmail"
+            ErrorMessage="Email is required."
+            ForeColor="Red" />
+        <asp:RegularExpressionValidator
+            ID="revEmail" runat="server"
+            ControlToValidate="txtEmail"
+            ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+            ErrorMessage="Enter a valid email."
+            ForeColor="Red" />
+        <br /><br />
+
+        User ID:
+        <asp:TextBox ID="txtUserId" runat="server" />
+        <asp:RequiredFieldValidator
+            ID="rfvUserId" runat="server"
+            ControlToValidate="txtUserId"
+            ErrorMessage="User ID is required."
+            ForeColor="Red" />
+        <asp:RegularExpressionValidator
+            ID="revUserId" runat="server"
+            ControlToValidate="txtUserId"
+            ValidationExpression="^(?=.*[A-Z])(?=.*[0-9]).{7,20}$"
+            ErrorMessage="User ID must be 7-20 characters
+            with a capital letter and a digit."
+            ForeColor="Red" />
+        <br /><br />
+
+        <asp:ValidationSummary
+            ID="vsErrors" runat="server"
+            ForeColor="Red" />
+
+        <asp:Button ID="btnSubmit" runat="server"
+            Text="Submit" OnClick="btnSubmit_Click" />
+
+        <br /><br />
+        <asp:Label ID="lblMessage" runat="server" />
+    </div>
+</form>
+</body>
+</html>
+
+
+3. Code — Register.aspx.cs
+using System;
+
+namespace ToDoPlanner
+{
+    public partial class Register : System.Web.UI.Page
+    {
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            Page.Validate();
+
+            if (Page.IsValid)
+            {
+                lblMessage.Text = "Registration successful!";
+                lblMessage.ForeColor =
+                    System.Drawing.Color.Green;
+            }
+            else
+            {
+                lblMessage.Text = "Please correct the errors.";
+                lblMessage.ForeColor =
+                    System.Drawing.Color.Red;
+            }
+        }
+    }
+}
+
+
+4. Explanation of validation controls
+Control	Purpose
+RequiredFieldValidator	Ensures a field is not left empty
+CompareValidator	Checks whether both passwords match
+RangeValidator	Restricts age to 21–30
+RegularExpressionValidator	Checks email and User ID patterns
+ValidationSummary	Displays the validation errors together
+- ControlToValidate specifies which input field is checked.
+- ControlToCompare identifies the field used for comparison.
+- MinimumValue and MaximumValue define the allowed range.
+- ValidationExpression defines the regular expression used for validation.
+- Page.IsValid checks whether the validators passed.
+5. Sample output
+Registration Form
+Name: John
+Password: ••••••••
+Confirm Password: ••••••••
+Age: 25
+Email: john@example.com
+User ID: John123
+
+Registration successful!
+
+
+Examples of invalid input:
+- Age 19 → age validation error.
+- Different passwords → password mismatch error.
+- Email johnexample.com → invalid email error.
+- User ID john123 → invalid because it has no capital letter.
+6. Result
+Thus, an ASP.NET Web Forms application was developed using validation controls to validate mandatory fields, password confirmation, age, email address, and User ID.
+7. Viva questions and answers
+1. What is ASP.NET?
+ASP.NET is a Microsoft framework for building web applications.
+2. What are validation controls?
+They check user input against specified rules before processing a form.
+3. What is RequiredFieldValidator?
+It ensures that the user enters a value in a required field.
+4. What is CompareValidator?
+It compares two values, such as a password and its confirmation.
+5. What is RangeValidator?
+It checks whether a value falls within a specified range.
+6. What is RegularExpressionValidator?
+It validates input against a defined pattern.
+7. What is ValidationSummary?
+It displays a summary of validation errors on the page.
+8. What does Page.IsValid mean?
+It indicates whether the page's validation controls have passed.
+9. Why is TextMode="Password" used?
+It masks the characters entered in a password field.
+10. Why use server-side validation?
+To ensure that input is validated on the server, even if client-side validation is bypassed.
+Note: These controls are from the classic ASP.NET Web Forms framework, so use ASP.NET Web Application (.NET Framework) rather than an ASP.NET Core project. For a real registration system, also validate on the server and hash passwords before storing them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+task10
+
+
+
+
+
+
+
+
+
+
+
+
+Worked for 5s
+Searched files for relevant information
+
+
+
+
+
+
+
+
+
+
+
+
+
+Task 10: Working with LINQ to ADO.NET
+Aim: To create a database table containing employee details and display the records in an ASP.NET web page using a GridView control and LINQ to ADO.NET.
+According to your lab manual, the employee table contains EmpNo, EmpName, EmpSal, EmpJob, and EmpDeptNo.
+1. Steps to perform
+1. Open Visual Studio and create an ASP.NET Web Application (.NET Framework) using Web Forms.
+2. Open SQL Server or SQL Server Management Studio (SSMS).
+3. Create a database and an employee table.
+4. Insert sample employee records.
+5. Add a LINQ to SQL class (.dbml) to the project.
+6. Connect the class to the employee table using Server Explorer.
+7. Add a Web Form containing a GridView.
+8. Use LINQ to retrieve employee records and bind them to the GridView.
+9. Run the application and verify that the employee details are displayed.
+2. Create the database and table
+Open SSMS and execute the following SQL:
+CREATE DATABASE EmployeeDB;
+GO
+
+USE EmployeeDB;
+GO
+
+CREATE TABLE Employees
+(
+    EmpNo INT PRIMARY KEY,
+    EmpName VARCHAR(50),
+    EmpSal DECIMAL(10,2),
+    EmpJob VARCHAR(50),
+    EmpDeptNo INT
+);
+
+INSERT INTO Employees
+VALUES
+(101, 'Ravi', 35000, 'Developer', 10),
+(102, 'Sita', 45000, 'Manager', 20),
+(103, 'Kiran', 30000, 'Tester', 10),
+(104, 'Priya', 50000, 'Analyst', 30);
+
+SELECT * FROM Employees;
+
+
+3. Add LINQ to SQL Classes
+1. Right-click your project in Solution Explorer.
+2. Select Add → New Item.
+3. Choose LINQ to SQL Classes.
+4. Name it EmployeeData.dbml.
+5. Open Server Explorer and connect to your SQL Server database.
+6. Expand EmployeeDB → Tables.
+7. Drag the Employees table onto the .dbml designer.
+8. Save the file.
+Visual Studio generates the entity class and a data context. In the code below, the generated data context is assumed to be named EmployeeDataDataContext. If Visual Studio generates a different name, use that name instead.
+4. Design the Web Form — Employees.aspx
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Employees.aspx.cs"
+    Inherits="ToDoPlanner.Employees" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Employee Information</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Employee Information</h2>
+
+            <asp:GridView ID="GridView1" runat="server"
+                AutoGenerateColumns="true">
+            </asp:GridView>
+        </div>
+    </form>
+</body>
+</html>
+
+
+5. Code — Employees.aspx.cs
+using System;
+using System.Linq;
+
+namespace ToDoPlanner
+{
+    public partial class Employees : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                using (EmployeeDataDataContext db =
+                       new EmployeeDataDataContext())
+                {
+                    var employees =
+                        from emp in db.Employees
+                        select emp;
+
+                    GridView1.DataSource = employees;
+                    GridView1.DataBind();
+                }
+            }
+        }
+    }
+}
+
+
+Important: The code assumes the generated entity collection is named Employees and the context class is EmployeeDataDataContext. Check EmployeeData.dbml and use its actual generated names if they differ.
+6. Explanation
+- LINQ: Language Integrated Query; it allows queries to be written using C# syntax.
+- ADO.NET: Provides .NET data-access functionality.
+- LINQ to SQL: Maps database tables to C# classes and lets you query them.
+- EmployeeDataDataContext: Represents the database connection and query context generated by the .dbml file.
+- from emp in db.Employees: Reads employee records from the mapped table.
+- select emp: Selects the employee records.
+- GridView1.DataSource: Specifies the data to display.
+- GridView1.DataBind(): Binds the retrieved records to the GridView.
+- !IsPostBack: Loads the data when the page first opens, rather than on every postback.
+7. Sample output
+Employee Information
+EmpNo	EmpName	EmpSal	EmpJob	EmpDeptNo
+101	Ravi	35000	Developer	10
+102	Sita	45000	Manager	20
+103	Kiran	30000	Tester	10
+104	Priya	50000	Analyst	30
+
+8. Result
+Thus, an ASP.NET Web Forms application was developed to retrieve employee records from SQL Server using LINQ to ADO.NET and display them in a GridView.
+9. Viva questions and answers
+1. What is LINQ?
+LINQ stands for Language Integrated Query. It allows querying data using C# syntax.
+2. What is ADO.NET?
+ADO.NET is a .NET technology used to connect to and work with data sources.
+3. What is LINQ to SQL?
+It maps relational database tables to .NET classes and allows querying them through LINQ.
+4. What is a GridView?
+GridView is an ASP.NET control used to display data in rows and columns.
+5. What is a .dbml file?
+It is a LINQ to SQL mapping file that defines the relationship between database tables and application classes.
+6. What is DataBind()?

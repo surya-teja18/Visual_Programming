@@ -1,0 +1,131 @@
+Task 2: Working with Callbacks and Delegates in C#
+Visual Programming Lab Manual · Pages 12–13
+I'll give you a Notepad-ready reference with the procedure, complete C# program, explanation, and sample output so you can refer to it during your internal lab.
+1. Aim
+To demonstrate the use of delegates, callbacks, and synchronous and asynchronous method invocation in C#.
+2. Software requirements
+- Microsoft Visual Studio
+- C# Console Application
+3. Procedure / steps
+1. Open Microsoft Visual Studio.
+2. Select Create a new project.
+3. Choose Console App (C#) and click Next.
+4. Enter the project name as DelegateDemo.
+5. Click Create.
+6. Open Program.cs and remove the existing code.
+7. Copy and paste the program below.
+8. Save the file using Ctrl + S.
+9. Run the application using Ctrl + F5.
+10. Observe the output showing synchronous invocation, callback execution, and asynchronous invocation.
+4. Program
+Copy this code into Program.cs. It follows the lab manual's delegate and callback example.
+
+using System;
+using System.Threading;
+
+class Program
+{
+    // Define a delegate type
+    public delegate void ProcessDelegate(int number);
+
+    static void Main(string[] args)
+    {
+        // Synchronous delegate invocation
+        Console.WriteLine("Synchronous Delegate Invocation:");
+        ProcessDelegate processDelegate =
+            new ProcessDelegate(ProcessNumber);
+        processDelegate(10);
+
+        // Using delegate as a callback
+        Console.WriteLine("\nUsing Delegate as a Callback:");
+        ExecuteWithCallback(20, ProcessNumber);
+
+        // Asynchronous delegate invocation
+        Console.WriteLine("\nAsynchronous Delegate Invocation:");
+        ProcessDelegate asyncProcessDelegate =
+            new ProcessDelegate(ProcessNumber);
+
+        IAsyncResult asyncResult =
+            asyncProcessDelegate.BeginInvoke(30, null, null);
+
+        // Do other work in the main thread
+        Console.WriteLine("Doing other work in the main thread...");
+
+        // Wait for asynchronous operation to complete
+        asyncProcessDelegate.EndInvoke(asyncResult);
+
+        Console.WriteLine("\nProgram has finished execution.");
+    }
+
+    // Method matching the delegate signature
+    public static void ProcessNumber(int number)
+    {
+        Console.WriteLine($"Processing number: {number}");
+        Thread.Sleep(2000);
+        Console.WriteLine($"Finished processing number: {number}");
+    }
+
+    // Method that accepts a callback delegate
+    public static void ExecuteWithCallback(
+        int number, ProcessDelegate callback)
+    {
+        Console.WriteLine("Starting execution...");
+        callback(number);
+        Console.WriteLine("Finished execution.");
+    }
+}
+
+
+
+Important for your lab: This exact program uses BeginInvoke() and EndInvoke(), which work with delegates in .NET Framework but are not supported in modern .NET (such as .NET 6, 8, or 10). If you encounter a compilation error, create a .NET Framework Console App to run the manual's program as written.
+5. Explanation
+Concept	Explanation
+Delegate	A type-safe reference to a method with a matching signature.
+ProcessDelegate	Defines a delegate that accepts an integer and returns nothing (void).
+Synchronous invocation	processDelegate(10) executes the method and waits for it to finish.
+Callback	A method (ExecuteWithCallback) receives another method through a delegate and invokes it.
+Asynchronous invocation	BeginInvoke() starts the delegate operation without immediately waiting for completion.
+EndInvoke()	Waits for the asynchronous operation to finish and completes the invocation.
+Thread.Sleep(2000)	Pauses the executing thread for approximately two seconds.
+How the program works
+1. The delegate is declared with an integer parameter.
+2. ProcessNumber(10) is invoked synchronously.
+3. ExecuteWithCallback(20, ProcessNumber) demonstrates passing a method as a callback.
+4. The delegate is invoked asynchronously with the value 30.
+5. The main thread prints a message while the asynchronous operation is running.
+6. EndInvoke() waits for the operation to complete before the program exits.
+6. Expected output
+The asynchronous section may display messages in a different order depending on thread scheduling.
+Synchronous Delegate Invocation:
+Processing number: 10
+Finished processing number: 10
+
+Using Delegate as a Callback:
+Starting execution...
+Processing number: 20
+Finished processing number: 20
+Finished execution.
+
+Asynchronous Delegate Invocation:
+Processing number: 30
+Doing other work in the main thread...
+Finished processing number: 30
+
+Program has finished execution.
+
+
+7. Result
+Thus, a C# console application was implemented to demonstrate delegates, callbacks, synchronous method invocation, and asynchronous delegate invocation.
+8. Viva questions
+1. What is a delegate?
+A delegate is a type-safe reference to a method.
+2. What is a callback?
+A callback is a method passed to another method so that it can be invoked when required.
+3. What is the difference between synchronous and asynchronous execution?
+- Synchronous: The caller waits for the operation to finish.
+- Asynchronous: The caller can continue other work while the operation executes.
+4. What is Thread.Sleep(2000)?
+It pauses the current thread for approximately 2,000 milliseconds, or two seconds.
+5. Why do we use EndInvoke()?
+To wait for the asynchronous delegate operation to finish and retrieve its completion result.
+
